@@ -43,7 +43,6 @@ public class LifecycleServlet extends HttpServlet {
 		out.println("</body>");
 		out.println("</html>");
 		out.close();
-
 	}
 
 	@Override
