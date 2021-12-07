@@ -19,7 +19,7 @@ public class RoleDao {
 	private static String dbpasswd = "1111";
 	
 	/** role 테이블의 모든 자료를 조회하여 role 객체의 list로 만든다.
-	 * @return List List
+//	 * @return List List
 	 */
 	public List<Role> getRoles() {
 		List<Role> list = new ArrayList<>();
