@@ -33,7 +33,7 @@ public class RoleDao {
 		String sql = "SELECT description, role_id FROM role order by role_id desc";
 		try (   // 시작점에서 try-with-resources 선언하면 finally에서 close할 필요가 없어진다.
 				Connection conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
-				PreparedStatement ps = conn.prepareStatement(sql)
+				PreparedStatement ps = conn.prepareStatement(sql);
 		) {
 			try (ResultSet rs = ps.executeQuery()) {
 				
@@ -44,7 +44,7 @@ public class RoleDao {
 					list.add(role); // 반복시마다 Role 인스턴스를 생성하여 list에 추가한다.
 				}
 			} catch (Exception e) {
-			
+				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
