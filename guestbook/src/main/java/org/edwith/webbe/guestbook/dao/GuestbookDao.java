@@ -4,9 +4,9 @@ import org.edwith.webbe.guestbook.dto.Guestbook;
 import org.edwith.webbe.guestbook.util.DBUtil;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,8 +32,9 @@ public class GuestbookDao {
         			Long id = rs.getLong("id");
         			String name = rs.getString("name");
         			String content = rs.getString("content");
-        			Date regdate = rs.getDate(4);
+        			Date regdate = rs.getTimestamp(4);
         			Guestbook gs = new Guestbook(id, name, content, regdate);
+        			System.out.println(gs.toString());
         			list.add(gs);        			
         		}
         	} catch (Exception e) {
@@ -55,21 +56,25 @@ public class GuestbookDao {
     		e.printStackTrace();
     	}
     	
-    	String sql = "INSERT INTO guestbook(name, content) VALUES(?, ?)";
+    	String sql = "INSERT INTO guestbook(name, content, regdate) VALUES(?, ?, ?)";
     	try (
 			Connection conn = DBUtil.getConnection();
     		PreparedStatement ps = conn.prepareStatement(sql);
 		) {
     		ps.setString(1, guestbook.getName());
     		ps.setString(2, guestbook.getContent());
+    		java.sql.Timestamp sqlDate = new java.sql.Timestamp(guestbook.getRegdate().getTime());
+    		ps.setTimestamp(3, sqlDate);
     		
     		insertCount = ps.executeUpdate();
     		
     	} catch (Exception e) {
     		e.printStackTrace();
     		System.out.println(insertCount + " : Guestbook upload Failed");
+    		System.out.println(guestbook.toString());
     		return;
     	}
     	System.out.println(insertCount + " : Guestbook upload Success");
+    	System.out.println(guestbook.toString());
     }
 }
