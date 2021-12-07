@@ -5,20 +5,16 @@
 <html>
     <head>
         <title>방명록</title>
-        <style>
-            .guestbook {
-                padding: 5px 0px 5px 5px;
-                margin-bottom: 5px;
-                border-bottom: 1px solid #efefef;
-                font-size: 12px;
-            }
-        </style>
+<%--         <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css"  type="text/css" /> --%>
+		<style type="text/css">
+	        <%@ include file="style.css" %>
+		</style>
     </head>
-    <body>
+    <body>   	
 
-        <div class="guestbooks">
+        <div class="guestbooks split left">
             <c:forEach var="guestbook" items="${list}">
-                <div class="guestbook">
+                <div class="guestbook item">
                     <div> <label>id : </label> ${guestbook.id}</div>
                     <div> <label>name : </label> ${guestbook.name}</div>
                     <div> <p>${guestbook.content}</p></div>
@@ -28,12 +24,14 @@
         </div>
 
         <br><br><br>
-
-        <form method="post" action="guestbooks/write">
-            이름 : <input type="text" name="name"><br>
-            내용 :
-            <textarea name="content" cols="50" rows="5"></textarea><br>
-            <input type="submit" value="확인">
-        </form>
+		
+		<div class="formsection split right">
+	        <form method="post" action="guestbooks/write">
+	            이름 : <input type="text" name="name"><br>
+	            내용 :
+	            <textarea name="content" cols="50" rows="5"></textarea><br>
+	            <input type="submit" value="확인">
+	        </form>
+		</div>
     </body>
 </html>

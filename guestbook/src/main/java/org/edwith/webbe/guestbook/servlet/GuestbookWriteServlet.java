@@ -22,7 +22,7 @@ public class GuestbookWriteServlet extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("/guestbooks");
+		response.sendRedirect("/guestbook/guestbooks");
 		// redirect 오류나는 문제 server의 path 수정.
 		// https://shinye0213.tistory.com/336
 		// https://october-east-sea.tistory.com/160

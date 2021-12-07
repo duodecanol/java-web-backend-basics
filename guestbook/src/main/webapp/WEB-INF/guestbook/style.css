@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+h1{
+	color:red;
+}
+
+.guestbook {
+    padding: 5px 0px 5px 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #efefef;
+    font-size: 12px;   
+} 
+
+.item {
+	border: 2px solid;
+	
+}
+
+.split{
+	height: 100%;
+	width: 50%;
+	position: fixed;
+	z-index: 1;
+	top:0;
+	overflow-x: hidden;
+	padding-top: 20px;	
+}
+
+.left {
+	left: 0;	
+}
+
+.right {
+	right: 0;
+}
