@@ -1,5 +1,6 @@
 package kr.or.connect.guestbook.dto;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Guestbook {
@@ -31,7 +32,8 @@ public class Guestbook {
 		return regdate;
 	}
 	public void setRegdate(Date regdate) {
-		this.regdate = regdate;
+		Timestamp sqlDate = new Timestamp(regdate.getTime());
+		this.regdate = sqlDate;
 	}
 	@Override
 	public String toString() {
