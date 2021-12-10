@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import kr.or.connect.guestbook.dto.Guestbook;
+import static kr.or.connect.guestbook.dao.GuestbookDaoSqls.*;
 
 @Repository
 public class GuestbookDao {
@@ -36,7 +37,7 @@ public class GuestbookDao {
 		Map<String, Integer> params = new HashMap<>();
 		params.put("start", start);
 		params.put("limit", limit);
-		return jdbc.query("SELECT * FROM visitorbook OFFSET ? LIMIT ?", params, rowMapper);		
+		return jdbc.query(SELECT_PAGING, params, rowMapper);		
 	}
 	
 	public Long insert(Guestbook guestbook) {
@@ -46,11 +47,11 @@ public class GuestbookDao {
 	
 	public int deleteById(Long id) {
 		Map<String, ?> params = Collections.singletonMap("id", id);
-		return jdbc.update("DELETE FROM visitorbook WHERE id = ?", params);
+		return jdbc.update(DELETE_BY_ID, params);
 	}
 	
 	public int selectCount() {
-		return jdbc.queryForObject("SELECT COUNT(*) FROM visitorbook", Collections.emptyMap(), Integer.class);
+		return jdbc.queryForObject(SELECT_COUNT, Collections.emptyMap(), Integer.class);
 	}
 }
 
