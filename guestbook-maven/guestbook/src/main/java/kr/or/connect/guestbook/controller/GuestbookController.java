@@ -3,7 +3,9 @@ package kr.or.connect.guestbook.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,14 +24,44 @@ public class GuestbookController {
 	GuestbookService guestbookService;
 
 	@GetMapping(path = "/list")
-	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, ModelMap model) {
+	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, ModelMap model,
+			HttpServletRequest request, HttpServletResponse response) {
 
+		// 쿠키 handler
+		String value = null;
+		boolean find = false;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) { // 쿠키가 없는 경우는 아래 동작 스킵
+			for (Cookie cookie : cookies) {
+				if ("count".equals(cookie.getName())) { // 쿠키들 중에서 이름이 "count"로 된 것들
+					find = true;
+					value = cookie.getValue(); // 해당하는 녀석의 값 pair를 불러와 변수로 저장
+				}
+			}
+		}
+
+		if (!find) { // 찾지 못한 경우 쿠키 count: 1
+			value = "1";
+		} else {
+			try {
+				int i = Integer.parseInt(value); // 찾은 경우 기존 값에 ++
+				value = Integer.toString(++i);
+			} catch (Exception ex) {
+				value = "1"; // Exception 발생시 count: 1로 초기화
+			}
+		}
+
+		Cookie cookie = new Cookie("count", value);
+		cookie.setMaxAge(60 * 60 * 24 * 7); // 7일간 쿠키 유지
+		cookie.setPath("/"); // '/' 경로 이하에 모두 적용
+		response.addCookie(cookie);
+		
 		// 방명록 목록 구하기
 		List<Guestbook> list = guestbookService.getGuestbooks(start);
 
 		// 전체 페이지수 구하기
 		int count = guestbookService.getCount();
-		int pageCount = count / guestbookService.LIMIT;
+		int pageCount = count / GuestbookService.LIMIT;
 		if (count % GuestbookService.LIMIT > 0)
 			pageCount++;
 
@@ -45,6 +77,7 @@ public class GuestbookController {
 		model.addAttribute("list", list);
 		model.addAttribute("count", count);
 		model.addAttribute("pageStartList", pageStartList);
+		model.addAttribute("cookieCount", value); // JSP에게 전달하기 위해 쿠키 값을 model에 담아 전송
 
 		return "list";
 	}
@@ -53,7 +86,7 @@ public class GuestbookController {
 	public String write(@ModelAttribute Guestbook guestbook, HttpServletRequest request) {
 		String clientIp = request.getRemoteAddr();
 		System.out.println("Client IP: " + clientIp);
-		guestbookService.addGuestbook(guestbook, clientIp);		
+		guestbookService.addGuestbook(guestbook, clientIp);
 		return "redirect:list";
 	}
 }
