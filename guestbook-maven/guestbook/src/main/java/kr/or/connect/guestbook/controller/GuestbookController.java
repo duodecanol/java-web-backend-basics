@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,31 +25,16 @@ public class GuestbookController {
 	GuestbookService guestbookService;
 
 	@GetMapping(path = "/list")
-	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, ModelMap model,
+	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, 
+			ModelMap model,
+			@CookieValue(value = "count", defaultValue = "0", required = true) String value, // Cookie Handler Annot
 			HttpServletRequest request, HttpServletResponse response) {
 
-		// 쿠키 handler
-		String value = null;
-		boolean find = false;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) { // 쿠키가 없는 경우는 아래 동작 스킵
-			for (Cookie cookie : cookies) {
-				if ("count".equals(cookie.getName())) { // 쿠키들 중에서 이름이 "count"로 된 것들
-					find = true;
-					value = cookie.getValue(); // 해당하는 녀석의 값 pair를 불러와 변수로 저장
-				}
-			}
-		}
-
-		if (!find) { // 찾지 못한 경우 쿠키 count: 1
-			value = "1";
-		} else {
-			try {
-				int i = Integer.parseInt(value); // 찾은 경우 기존 값에 ++
-				value = Integer.toString(++i);
-			} catch (Exception ex) {
-				value = "1"; // Exception 발생시 count: 1로 초기화
-			}
+		try {
+			int i = Integer.parseInt(value); // 찾은 경우 기존 값에 ++
+			value = Integer.toString(++i);
+		} catch (Exception ex) {
+			value = "1"; // Exception 발생시 count: 1로 초기화
 		}
 
 		Cookie cookie = new Cookie("count", value);
