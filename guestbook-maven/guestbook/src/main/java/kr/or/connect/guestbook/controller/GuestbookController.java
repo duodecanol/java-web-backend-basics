@@ -28,7 +28,8 @@ public class GuestbookController {
 	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, 
 			ModelMap model,
 			@CookieValue(value = "count", defaultValue = "0", required = true) String value, // Cookie Handler Annot
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response)
+	{
 
 		try {
 			int i = Integer.parseInt(value); // 찾은 경우 기존 값에 ++
