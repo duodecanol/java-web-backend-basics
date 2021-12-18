@@ -20,8 +20,14 @@ ${ guestbook.id } <br>
 ${ guestbook.name } <br>
 ${ guestbook.content } <br>
 ${ guestbook.regdate } <br>
+    <c:if test="${ sessionScope.isAdmin == 'true' }">
+      <a href="delete?id=${ guestbook.id }">삭제</a>
+      <br>
+      <br>
+    </c:if>
   </c:forEach>
   <br>
+  
 
   <c:forEach items="${ pageStartList }" var="pageIndex" varStatus="status">
     <a href="list?start=${ pageIndex }">${ status.index + 1 }</a>&nbsp; &nbsp;
