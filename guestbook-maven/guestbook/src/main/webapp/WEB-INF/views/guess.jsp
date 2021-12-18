@@ -9,12 +9,20 @@
 
 <body>
   <h1>1 ~ 100 사이의 숫자를 맞춰보세요</h1>
-  
-  <form method="post" action="write">
-    name: <input type="text" name="name"><br>
-    <textarea name="content" rows="6" cols="60"></textarea>
-    <br> <input type="submit" value="register">
-  </form>
+  <hr>
+  <h3>${ message }</h3>
+
+  <c:choose>
+    <c:when test="${ sessionScope.count != null }">
+      <form method="get" action="guess">
+        1~100 의 숫자를 맞춰보세요! <br> <input type="text" name="number"><br> <input type="submit" value="확인">
+      </form>
+    </c:when>
+    <c:otherwise>
+      <br>
+      <input type="button" value="돌아가기" onclick="location.href='guess'">
+    </c:otherwise>
+  </c:choose>
 
 </body>
 
